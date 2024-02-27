@@ -4,7 +4,7 @@ class Ship {
     this.hits = 0;
     this.sunk = false;
     this.coordinates = [];
-    this.surroundingCells = [];
+    this.neighborCells = [];
   }
 
   hit = () => {

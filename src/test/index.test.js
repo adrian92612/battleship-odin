@@ -49,6 +49,6 @@ describe("Gameboard", () => {
     for (let i = 0; i < 4; i++) {
       expect(gb.grid[0 + i][0]).toBe(ship);
     }
-    console.log(ship.coordinates);
+    console.log(ship.neighborCells);
   });
 });

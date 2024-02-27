@@ -1,2 +1,2 @@
 import "./style.css";
-import { getSurroundingCells } from "./gameboard";
+import { getNeighborCells } from "./gameboard";
