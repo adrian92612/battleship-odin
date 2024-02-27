@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "w": "webpack --watch",
     "j": "jest"
   },
   "keywords": [],

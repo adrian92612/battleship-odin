@@ -7,7 +7,19 @@
 
 const isWithinBoard = (x, y) => x >= 0 && x <= 9 && y >= 0 && y <= 9;
 
-const surroundingCells = (x, y) => {};
+const getSurroundingCells = (x, y) => {
+  const neighborCells = [
+    [x - 1, y],
+    [x + 1, y],
+    [x, y - 1],
+    [x, y + 1],
+    [x - 1, y - 1],
+    [x - 1, y + 1],
+    [x + 1, y + 1],
+    [x + 1, y - 1],
+  ];
+  return neighborCells.filter(([x, y]) => isWithinBoard(x, y));
+};
 
 function validateCoordinates(x, y, length, horizontal) {
   if (isWithinBoard(x, y)) {
@@ -15,11 +27,6 @@ function validateCoordinates(x, y, length, horizontal) {
     horizontal ? (x = x + length) : (y = y + length); // ending coordinates
     return isWithinBoard(x, y);
   }
-}
-
-function assignShip(cell, ship) {
-  cell = ship;
-  ship.coordinates.push(cell);
 }
 
 export default function Gameboard() {
@@ -44,3 +51,5 @@ export default function Gameboard() {
     },
   };
 }
+
+export { getSurroundingCells };
