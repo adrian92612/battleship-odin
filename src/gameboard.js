@@ -9,8 +9,6 @@ export default function Gameboard() {
 
   const isValidCell = (x, y) => isWithinBoard(x, y) && grid[x][y] === null;
 
-  const allShipsSunk = () => shipArray.every((x) => x.sunk === true);
-
   const getCornerCells = (x, y) => {
     const cornerCells = [
       [x - 1, y - 1],
@@ -68,10 +66,12 @@ export default function Gameboard() {
       return true;
     },
 
+    allShipsSunk: () => shipArray.every((x) => x.sunk === true),
+
     receiveAttack: (x, y) => {
       if (!(grid[x][y] instanceof Ship)) return false;
       grid[x][y].hit();
-      return allShipsSunk();
+      return true;
     },
   };
 }

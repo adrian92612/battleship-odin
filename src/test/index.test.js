@@ -51,10 +51,14 @@ describe("Gameboard", () => {
     }
   });
 
-  test("should end if no ships left", () => {
-    expect(gb.receiveAttack(0, 0)).toBeFalsy();
-    expect(gb.receiveAttack(1, 0)).toBeFalsy();
-    expect(gb.receiveAttack(2, 0)).toBeFalsy();
-    expect(gb.receiveAttack(3, 0)).toBeTruthy();
+  test("should return true of no ships left", () => {
+    gb.receiveAttack(0, 0);
+    expect(gb.allShipsSunk()).toBeFalsy();
+    gb.receiveAttack(1, 0);
+    expect(gb.allShipsSunk()).toBeFalsy();
+    gb.receiveAttack(2, 0);
+    expect(gb.allShipsSunk()).toBeFalsy();
+    gb.receiveAttack(3, 0);
+    expect(gb.allShipsSunk()).toBeTruthy();
   });
 });
