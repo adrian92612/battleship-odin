@@ -49,6 +49,12 @@ describe("Gameboard", () => {
     for (let i = 0; i < 4; i++) {
       expect(gb.grid[0 + i][0]).toBe(ship);
     }
-    console.log(ship.neighborCells);
+  });
+
+  test("should end if no ships left", () => {
+    expect(gb.receiveAttack(0, 0)).toBeFalsy();
+    expect(gb.receiveAttack(1, 0)).toBeFalsy();
+    expect(gb.receiveAttack(2, 0)).toBeFalsy();
+    expect(gb.receiveAttack(3, 0)).toBeTruthy();
   });
 });

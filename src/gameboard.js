@@ -3,10 +3,23 @@ import { Ship } from "./ship";
 export default function Gameboard() {
   const gridSize = 10;
   const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
+  const shipArray = [];
 
   const isWithinBoard = (x, y) => x >= 0 && x <= 9 && y >= 0 && y <= 9;
 
   const isValidCell = (x, y) => isWithinBoard(x, y) && grid[x][y] === null;
+
+  const allShipsSunk = () => shipArray.every((x) => x.sunk === true);
+
+  const getCornerCells = (x, y) => {
+    const cornerCells = [
+      [x - 1, y - 1],
+      [x - 1, y + 1],
+      [x + 1, y + 1],
+      [x + 1, y - 1],
+    ];
+    return cornerCells.filter(([x, y]) => isWithinBoard(x, y)).sort();
+  };
 
   const getNeighborCells = (x, y) => {
     const neighborCells = [
@@ -40,6 +53,8 @@ export default function Gameboard() {
         ship.coordinates = [];
         return false;
       }
+      // store in shipArray
+      shipArray.push(ship);
       // Put ship on every cell
       ship.coordinates.map(([x, y]) => (grid[x][y] = ship));
       // store neighbor cells
@@ -50,8 +65,13 @@ export default function Gameboard() {
       ].map(JSON.parse);
       // set neighbor cells to NA
       ship.neighborCells.forEach(([x, y]) => (grid[x][y] = "N/A"));
+      return true;
     },
 
-    receiveAttack: (x, y) => {},
+    receiveAttack: (x, y) => {
+      if (!(grid[x][y] instanceof Ship)) return false;
+      grid[x][y].hit();
+      return allShipsSunk();
+    },
   };
 }
