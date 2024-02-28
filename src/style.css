@@ -45,4 +45,11 @@
   /* min-width: var(--grid-size); */
   height: var(--grid-size);
   border: 1px solid black;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+.cells {
+  border: 1px solid black;
 }

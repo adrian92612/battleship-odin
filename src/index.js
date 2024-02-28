@@ -6,6 +6,9 @@ import { Player, Computer } from "./player";
 function gameLoop() {
   const human = Player();
   const comp = Computer();
+
+  human.gameboard.render();
+  comp.gameboard.render(false);
 }
 
 gameLoop();

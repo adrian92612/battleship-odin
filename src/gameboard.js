@@ -1,12 +1,21 @@
 import { Ship } from "./ship";
+import * as dom from "./dom";
+
+class Cell {
+  constructor(element, x, y) {
+    this.element = element;
+    this.coordinates = { x, y };
+  }
+}
 
 export default function Gameboard() {
   const gridSize = 10;
   const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
   const shipArray = [];
+  const cellsArray = [];
 
   const isWithinBoard = (x, y) => x >= 0 && x <= 9 && y >= 0 && y <= 9;
-
+  const getCell = (x, y) => cellsArray.find((c) => c.coordinates.x === x && c.coordinates.y === y);
   const isValidCell = (x, y) => isWithinBoard(x, y) && grid[x][y] === null;
 
   const getCornerCells = (x, y) => {
@@ -39,6 +48,8 @@ export default function Gameboard() {
   return {
     grid,
 
+    allShipsSunk: () => shipArray.every((x) => x.sunk === true),
+
     placeShip: (ship, x, y, horizontal = true) => {
       // set ship's coordinates
       for (let i = 0; i < ship.length; i++) {
@@ -66,12 +77,23 @@ export default function Gameboard() {
       return true;
     },
 
-    allShipsSunk: () => shipArray.every((x) => x.sunk === true),
-
     receiveAttack: (x, y) => {
       if (!(grid[x][y] instanceof Ship)) return false;
       grid[x][y].hit();
       return true;
     },
+
+    render: (human = true) => {
+      const container = human
+        ? document.querySelector(".player-board")
+        : document.querySelector(".computer-board");
+      grid.forEach((row, x) => {
+        row.forEach((column, y) => {
+          cellsArray.push(dom.createCells(container, x, y));
+        });
+      });
+    },
   };
 }
+
+export { Cell };
