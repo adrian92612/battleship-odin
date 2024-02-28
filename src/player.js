@@ -1,11 +1,12 @@
 import Gameboard from "./gameboard";
 
-function Player(playerName) {
+function Player(playerName = "Jack Sparrow") {
   const name = playerName;
-  const playerBoard = Gameboard();
+  const gameboard = Gameboard();
 
   return {
     name,
+    gameboard,
 
     attack: (x, y, board) => {
       board.receiveAttack(x, y);
@@ -15,7 +16,7 @@ function Player(playerName) {
 
 function Computer(compName = "Admiral AI") {
   const name = compName;
-  const computerBoard = Gameboard();
+  const gameboard = Gameboard();
   const prevAtks = [];
 
   const generateCoordinates = () => {
@@ -30,6 +31,7 @@ function Computer(compName = "Admiral AI") {
 
   return Object.freeze({
     name,
+    gameboard,
 
     attack: (board) => {
       const { x, y } = generateCoordinates();
