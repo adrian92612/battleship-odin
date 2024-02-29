@@ -24,24 +24,22 @@ function Bot(botName = "Admiral AI") {
   const name = botName;
   const board = Gameboard("bot");
   const prevAtks = [];
-
-  const generateCoordinates = () => {
-    let x, y;
-    do {
-      x = Math.floor(Math.random() * 10);
-      y = Math.floor(Math.random() * 10);
-    } while (prevAtks.includes(`${x},${y}`));
-    prevAtks.push(`${x},${y}`);
-    return { x, y };
-  };
+  const attackTime = 500;
 
   return Object.freeze({
     name,
     board,
 
-    attack: (board) => {
-      const { x, y } = generateCoordinates();
-      board.receiveAttack(x, y);
+    pushToPrevAtks: (x, y) => prevAtks.push(`${x},${y}`),
+
+    getXY: () => {
+      let x, y;
+      do {
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+      } while (prevAtks.includes(`${x},${y}`));
+      prevAtks.push(`${x},${y}`);
+      return new Promise((res) => setTimeout(() => res([x, y]), attackTime));
     },
   });
 }

@@ -1,7 +1,7 @@
 import "./style.css";
 import Gameboard from "./gameboard";
 import { Ship } from "./ship";
-import { Player, Bot } from "./player";
+import { Bot } from "./player";
 import * as dom from "./dom";
 
 const BOT_BOARD = document.querySelector(".bot-board");
@@ -33,14 +33,12 @@ async function init() {
 
 function playerTurn() {
   const cells = Array.from(BOT_BOARD.children).filter((c) => c.dataset.active === "Y");
-  console.log(cells.length);
   return new Promise((res) => {
     cells.forEach((c) =>
       c.addEventListener(
         "click",
         () => {
           dom.deactivateCell(c);
-          console.log(c);
           res([parseInt(c.dataset.x), parseInt(c.dataset.y)]);
         },
         { once: true }
@@ -69,8 +67,10 @@ async function runGame(human, bot) {
     BOT_BOARD.style.pointerEvents = "all";
     // get player attack coordinate
     const [x, y] = await playerTurn();
-    // bot receive attack, if hit disable corner cells as well
+    // disable click on bot board
+    BOT_BOARD.style.pointerEvents = "none";
 
+    // bot receive attack, if hit disable corner cells as well
     const mark = bot.board.receiveAttack(x, y) ? "hit" : "missed";
     dom.updateCell(x, y, "bot", mark);
 
@@ -84,8 +84,21 @@ async function runGame(human, bot) {
         dom.updateCell(x, y, "bot", "missed");
       });
     }
-    // disable click on bot board
-    BOT_BOARD.style.pointerEvents = "none";
+
+    const [bX, bY] = await bot.getXY(); // 0.5 sec delay before bot attack
+
+    const botRes = human.receiveAttack(bX, bY) ? "hit" : "missed";
+    dom.updateCell(bX, bY, "human", botRes);
+    if (botRes === "hit") {
+      const ship = human.grid[bX][bY];
+      const cells = ship.sunk ? ship.neighborCells : human.getCornerCells(bX, bY);
+      cells.forEach(([x, y]) => {
+        bot.pushToPrevAtks(x, y);
+        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"][data-owner="human"]`);
+        dom.deactivateCell(cell);
+        dom.updateCell(x, y, "human", "missed");
+      });
+    }
   }
 }
 

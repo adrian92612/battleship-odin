@@ -40,6 +40,7 @@ export default function Gameboard(name) {
 
   return {
     grid,
+    owner,
     cellsArray,
     shipArray,
 
@@ -69,7 +70,6 @@ export default function Gameboard(name) {
       }
       // store in shipArray
       shipArray.push(ship);
-      console.log(shipArray);
       // Put ship on every cell
       ship.coordinates.map(([x, y]) => (grid[x][y] = ship));
       // store neighbor cells
@@ -86,7 +86,6 @@ export default function Gameboard(name) {
       // ].map(JSON.parse);
       // set neighbor cells to NA
       ship.neighborCells.forEach(([x, y]) => (grid[x][y] = "N/A"));
-      console.log(ship.neighborCells);
       return true;
     },
 
