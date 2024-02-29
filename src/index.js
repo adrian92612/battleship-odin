@@ -8,7 +8,8 @@ const BOT_BOARD = document.querySelector(".bot-board");
 
 async function init() {
   const human = Gameboard("human");
-  const bot = Gameboard("bot");
+  // const bot = Gameboard("bot");
+  const bot = Bot();
   const playerName = `Admiral ${await dom.getPlayerName()}`;
   dom.showPlayerBoard(playerName);
 
@@ -39,6 +40,7 @@ function playerTurn() {
         "click",
         () => {
           dom.deactivateCell(c);
+          console.log(c);
           res([parseInt(c.dataset.x), parseInt(c.dataset.y)]);
         },
         { once: true }
@@ -47,15 +49,17 @@ function playerTurn() {
   });
 }
 
+function removeCells() {}
+
 async function runGame(human, bot) {
   console.log("game!!");
   //place bot ships
-  bot.placeShip(new Ship(4), 2, 2, false);
-  bot.placeShip(new Ship(3), 5, 2, true);
-  bot.placeShip(new Ship(1), 3, 7, true);
+  bot.board.placeShip(new Ship(4), 2, 2, false);
+  bot.board.placeShip(new Ship(3), 5, 2, true);
+  bot.board.placeShip(new Ship(1), 3, 7, true);
 
   // show bot board
-  bot.render();
+  bot.board.render();
   dom.showBotBoard();
 
   let GameOver = false;
@@ -66,17 +70,19 @@ async function runGame(human, bot) {
     // get player attack coordinate
     const [x, y] = await playerTurn();
     // bot receive attack, if hit disable corner cells as well
-    if (bot.receiveAttack(x, y)) {
-      dom.updateCell(x, y, "bot", "hit");
-      const ship = bot.grid[x][y];
+
+    const mark = bot.board.receiveAttack(x, y) ? "hit" : "missed";
+    dom.updateCell(x, y, "bot", mark);
+
+    if (mark === "hit") {
+      const ship = bot.board.grid[x][y];
       // if ship is sunk, deactivate neighbor cells else corner cells
-      const cells = ship.sunk ? ship.neighborCells : bot.getCornerCells(x, y);
+      const cells = ship.sunk ? ship.neighborCells : bot.board.getCornerCells(x, y);
       cells.forEach(([x, y]) => {
         const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"][data-owner="bot"]`);
         dom.deactivateCell(cell);
         dom.updateCell(x, y, "bot", "missed");
       });
-    } else {
     }
     // disable click on bot board
     BOT_BOARD.style.pointerEvents = "none";

@@ -12,17 +12,17 @@ function Player(playerName = "Jack Sparrow") {
       board.receiveAttack(x, y);
     },
 
-    addListener: (board) => {
-      gameboard.cellsArray
-        .filter((c) => c.active === true)
-        .forEach((c) => c.element.addEventLister("click", clickHandler));
-    },
+    // addListener: (board) => {
+    //   gameboard.cellsArray
+    //     .filter((c) => c.active === true)
+    //     .forEach((c) => c.element.addEventLister("click", clickHandler));
+    // },
   };
 }
 
-function Computer(compName = "Admiral AI") {
-  const name = compName;
-  const gameboard = Gameboard();
+function Bot(botName = "Admiral AI") {
+  const name = botName;
+  const board = Gameboard("bot");
   const prevAtks = [];
 
   const generateCoordinates = () => {
@@ -37,7 +37,7 @@ function Computer(compName = "Admiral AI") {
 
   return Object.freeze({
     name,
-    gameboard,
+    board,
 
     attack: (board) => {
       const { x, y } = generateCoordinates();
@@ -46,4 +46,4 @@ function Computer(compName = "Admiral AI") {
   });
 }
 
-export { Player, Computer };
+export { Player, Bot };
