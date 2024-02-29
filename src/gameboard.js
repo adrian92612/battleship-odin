@@ -57,8 +57,8 @@ export default function Gameboard(name) {
     placeShip: (ship, x, y, horizontal = true) => {
       // set ship's coordinates
       for (let i = 0; i < ship.length; i++) {
-        const newX = horizontal ? x : x + i;
-        const newY = horizontal ? y + i : y;
+        const newX = horizontal ? x + i : x;
+        const newY = horizontal ? y : y + i;
         ship.coordinates.push([newX, newY]);
       }
       // check if all cells in coordinate are valid
@@ -93,8 +93,8 @@ export default function Gameboard(name) {
 
     render: () => {
       const container = document.querySelector(`.${owner}-board`);
-      grid.forEach((row, x) => {
-        row.forEach((column, y) => {
+      grid.forEach((column, y) => {
+        column.forEach((row, x) => {
           const cell = dom.createCells(container, x, y, owner);
           if (grid[x][y] instanceof Ship) dom.updateCell(x, y, owner, "ship");
         });

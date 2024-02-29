@@ -50,8 +50,8 @@ function playerTurn() {
 async function runGame(human, bot) {
   console.log("game!!");
   //place bot ships
-  bot.placeShip(new Ship(4), 3, 3, false);
-  bot.placeShip(new Ship(3), 8, 2, true);
+  bot.placeShip(new Ship(4), 2, 2, false);
+  bot.placeShip(new Ship(3), 5, 2, true);
 
   // show bot board
   bot.render();
