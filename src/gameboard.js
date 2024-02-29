@@ -43,6 +43,7 @@ export default function Gameboard(name) {
     cellsArray,
     shipArray,
 
+    allShipsSunk: () => shipArray.every((x) => x.sunk === true),
     getCornerCells: (x, y) => {
       const cornerCells = [
         [x - 1, y - 1],
@@ -52,8 +53,6 @@ export default function Gameboard(name) {
       ];
       return cornerCells.filter(([x, y]) => isWithinBoard(x, y)).sort();
     },
-
-    allShipsSunk: () => shipArray.every((x) => x.sunk === true),
 
     placeShip: (ship, x, y, horizontal = true) => {
       // set ship's coordinates
@@ -80,6 +79,7 @@ export default function Gameboard(name) {
       ].map(JSON.parse);
       // set neighbor cells to NA
       ship.neighborCells.forEach(([x, y]) => (grid[x][y] = "N/A"));
+      console.log(ship.neighborCells);
       return true;
     },
 
@@ -92,10 +92,6 @@ export default function Gameboard(name) {
     },
 
     render: () => {
-      // const container = human
-      //   ? document.querySelector(".player-board")
-      //   : document.querySelector(".computer-board");
-      // const owner = human ? "human" : "bot";
       const container = document.querySelector(`.${owner}-board`);
       grid.forEach((row, x) => {
         row.forEach((column, y) => {

@@ -5,6 +5,7 @@ const createCells = (container, x, y, owner) => {
   cellDiv.dataset.x = x;
   cellDiv.dataset.y = y;
   cellDiv.dataset.owner = owner;
+  cellDiv.dataset.active = "Y";
   cellDiv.classList.add("cells");
   container.append(cellDiv);
   const cell = new Cell(cellDiv, x, y);
@@ -15,6 +16,8 @@ const updateCell = (x, y, owner, mark) => {
   const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"][data-owner="${owner}"]`);
   cell.classList.add(`${mark}`);
 };
+
+const deactivateCell = (c) => (c.dataset.active = "N");
 
 function getPlayerName() {
   const form = document.querySelector("#get-name");
@@ -41,4 +44,4 @@ function showBotBoard() {
   board.removeAttribute("style");
 }
 
-export { createCells, updateCell, getPlayerName, showPlayerBoard, showBotBoard };
+export { createCells, updateCell, getPlayerName, showPlayerBoard, showBotBoard, deactivateCell };
