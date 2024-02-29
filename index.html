@@ -7,13 +7,17 @@
   <script defer src="bundle.js"></script></head>
   <body>
     <div id="app">
-      <div class="player-container">
-        <h2 class="player-name">Jack Sparrow</h2>
-        <div class="player-board"></div>
+      <form action="#" id="get-name">
+        <input type="text" id="name" placeholder="Admiral what???" />
+        <button type="submit">Confirm Name</button>
+      </form>
+      <div class="human-container" style="display: none">
+        <h2 class="human-name">Jack Sparrow</h2>
+        <div class="human-board"></div>
       </div>
-      <div class="computer-container">
-        <h2 class="computer-name">Admiral AI</h2>
-        <div class="computer-board"></div>
+      <div class="bot-container" style="display: none">
+        <h2 class="bot-name">Admiral AI</h2>
+        <div class="bot-board"></div>
       </div>
     </div>
   </body>
