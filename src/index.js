@@ -1,14 +1,19 @@
 import "./style.css";
 import Gameboard from "./gameboard";
 import { Ship } from "./ship";
-import { Player, Computer } from "./player";
+import { Player, Bot } from "./player";
+import * as dom from "./dom";
 
-function gameLoop() {
-  const human = Player();
-  const comp = Computer();
+async function init() {
+  const human = Gameboard("human");
+  const bot = Gameboard("bot");
+  const playerName = `Admiral ${await dom.getPlayerName()}`;
+  dom.showPlayerBoard(playerName);
 
-  human.gameboard.render();
-  comp.gameboard.render(false);
+  //Place ships
+  human.placeShip(new Ship(4), 1, 1, false);
+  human.placeShip(new Ship(3), 5, 4, true);
+  human.render();
 }
 
-gameLoop();
+init();

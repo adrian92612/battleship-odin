@@ -11,6 +11,12 @@ function Player(playerName = "Jack Sparrow") {
     attack: (x, y, board) => {
       board.receiveAttack(x, y);
     },
+
+    addListener: (board) => {
+      gameboard.cellsArray
+        .filter((c) => c.active === true)
+        .forEach((c) => c.element.addEventLister("click", clickHandler));
+    },
   };
 }
 

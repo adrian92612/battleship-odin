@@ -18,10 +18,33 @@
   align-items: center;
   gap: 50px;
   padding: 30px;
+  position: relative;
 }
 
-.player-container,
-.computer-container {
+#get-name {
+  width: 300px;
+  /* height: 100px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  gap: 10px;
+}
+
+#get-name > input,
+button {
+  padding: 10px;
+  font-size: 1.2rem;
+  border: 2px solid black;
+}
+
+.human-container,
+.bot-container {
   min-width: 500px;
   height: 90%;
   border: 1px solid black;
@@ -32,17 +55,15 @@
   align-items: center;
 }
 
-.player-name,
-.computer-name {
+.human-name,
+.bot-name {
   border: 1px solid black;
   height: 50px;
-  width: 200px;
 }
 
-.player-board,
-.computer-board {
+.human-board,
+.bot-board {
   width: var(--grid-size);
-  /* min-width: var(--grid-size); */
   height: var(--grid-size);
   border: 1px solid black;
   display: grid;
@@ -52,4 +73,20 @@
 
 .cells {
   border: 1px solid black;
+}
+
+.ship {
+  background-color: black;
+}
+
+.hit {
+  background-color: red;
+}
+
+.missed {
+  background-color: gray;
+}
+
+.splash {
+  background-color: salmon;
 }
