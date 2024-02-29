@@ -13,7 +13,26 @@ async function init() {
   //Place ships
   human.placeShip(new Ship(4), 1, 1, false);
   human.placeShip(new Ship(3), 5, 4, true);
+
+  //render
   human.render();
+
+  const startGame = document.querySelector("#start-game");
+  startGame.addEventListener(
+    "click",
+    (e) => {
+      runGame(human, bot);
+      console.log(e.target);
+      startGame.setAttribute("style", "display:none");
+    },
+    { once: true }
+  );
+}
+
+async function runGame(human, bot) {
+  console.log("game!!");
+  bot.render();
+  dom.showBotBoard();
 }
 
 init();

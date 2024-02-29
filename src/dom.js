@@ -36,4 +36,9 @@ function showPlayerBoard(name) {
   board.removeAttribute("style");
 }
 
-export { createCells, updateCell, getPlayerName, showPlayerBoard };
+function showBotBoard() {
+  const board = document.querySelector(".bot-container");
+  board.removeAttribute("style");
+}
+
+export { createCells, updateCell, getPlayerName, showPlayerBoard, showBotBoard };
