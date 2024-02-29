@@ -52,6 +52,7 @@ async function runGame(human, bot) {
   //place bot ships
   bot.placeShip(new Ship(4), 2, 2, false);
   bot.placeShip(new Ship(3), 5, 2, true);
+  bot.placeShip(new Ship(1), 3, 7, true);
 
   // show bot board
   bot.render();
@@ -67,16 +68,15 @@ async function runGame(human, bot) {
     // bot receive attack, if hit disable corner cells as well
     if (bot.receiveAttack(x, y)) {
       dom.updateCell(x, y, "bot", "hit");
-
-      let cornerCells = bot.getCornerCells(x, y);
-      console.log(cornerCells);
-
-      // forEach(([x, y]) => {
-      //   const cell = document.querySelector(
-      //     `[dataset-x="${x}"][dataset-y="${y}"][dataset-owner="bot"]`
-      //   );
-      //   console.log(cell);
-      // });
+      const ship = bot.grid[x][y];
+      // if ship is sunk, deactivate neighbor cells else corner cells
+      const cells = ship.sunk ? ship.neighborCells : bot.getCornerCells(x, y);
+      cells.forEach(([x, y]) => {
+        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"][data-owner="bot"]`);
+        dom.deactivateCell(cell);
+        dom.updateCell(x, y, "bot", "missed");
+      });
+    } else {
     }
     // disable click on bot board
     BOT_BOARD.style.pointerEvents = "none";

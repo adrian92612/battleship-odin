@@ -44,6 +44,7 @@ export default function Gameboard(name) {
     shipArray,
 
     allShipsSunk: () => shipArray.every((x) => x.sunk === true),
+
     getCornerCells: (x, y) => {
       const cornerCells = [
         [x - 1, y - 1],
@@ -77,6 +78,12 @@ export default function Gameboard(name) {
           [...ship.coordinates.map(([x, y]) => getNeighborCells(x, y))].flat(1).map(JSON.stringify)
         ),
       ].map(JSON.parse);
+      // // store corner cells
+      // ship.cornerCells = [
+      //   ...new Set(
+      //     [...ship.coordinates.map(([x, y]) => getCornerCells(x, y))].flat(1).map(JSON.stringify)
+      //   ),
+      // ].map(JSON.parse);
       // set neighbor cells to NA
       ship.neighborCells.forEach(([x, y]) => (grid[x][y] = "N/A"));
       console.log(ship.neighborCells);
