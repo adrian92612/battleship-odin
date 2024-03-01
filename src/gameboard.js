@@ -18,7 +18,6 @@ export default function Gameboard(name) {
   const owner = name;
 
   const isWithinBoard = (x, y) => x >= 0 && x <= 9 && y >= 0 && y <= 9;
-  const getCell = (x, y) => cellsArray.find((c) => c.x === x && c.y === y);
   const isValidCell = (x, y) => isWithinBoard(x, y) && grid[x][y] === null;
 
   const getNeighborCells = (x, y) => {
@@ -45,6 +44,7 @@ export default function Gameboard(name) {
     shipArray,
 
     allShipsSunk: () => shipArray.every((x) => x.sunk === true),
+    validCell: (x, y) => isValidCell(x, y),
 
     getCornerCells: (x, y) => {
       const cornerCells = [
@@ -58,6 +58,7 @@ export default function Gameboard(name) {
 
     placeShip: (ship, x, y, horizontal = true) => {
       // set ship's coordinates
+      ship.coordinates = [];
       for (let i = 0; i < ship.length; i++) {
         const newX = horizontal ? x + i : x;
         const newY = horizontal ? y : y + i;

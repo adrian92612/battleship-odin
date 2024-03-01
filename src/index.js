@@ -5,6 +5,7 @@ import { Bot } from "./player";
 import * as dom from "./dom";
 
 const BOT_BOARD = document.querySelector(".bot-board");
+const PLAYER_BOARD = document.querySelector(".human-board");
 
 async function init() {
   const human = Gameboard("human");
@@ -13,12 +14,14 @@ async function init() {
   const playerName = `Admiral ${await dom.getPlayerName()}`;
   dom.showPlayerBoard(playerName);
 
-  //Place ships
-  human.placeShip(new Ship(4), 1, 1, false);
-  human.placeShip(new Ship(3), 5, 4, true);
-
   //render
+  const ships = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)];
   human.render();
+
+  while (ships.length > 0) {
+    await placeShipOnBoard(human, ships.shift());
+  }
+  console.log("nice");
 
   const startGame = document.querySelector("#start-game");
   startGame.addEventListener(
@@ -29,22 +32,6 @@ async function init() {
     },
     { once: true }
   );
-}
-
-function playerTurn() {
-  const cells = Array.from(BOT_BOARD.children).filter((c) => c.dataset.active === "Y");
-  return new Promise((res) => {
-    cells.forEach((c) =>
-      c.addEventListener(
-        "click",
-        () => {
-          dom.deactivateCell(c);
-          res([parseInt(c.dataset.x), parseInt(c.dataset.y)]);
-        },
-        { once: true }
-      )
-    );
-  });
 }
 
 async function runGame(human, bot) {
@@ -83,6 +70,67 @@ async function runGame(human, bot) {
   }
 
   console.log("END!!!");
+}
+
+function placeShipOnBoard(board, ship) {
+  // array of Ships, get one, get cell x,y on mousehover, get ship coordinates,
+  // check if all coordinates are null in board, place ships, render board, get another ship repeat
+  return new Promise((resolve) => {
+    const cells = Array.from(PLAYER_BOARD.children);
+    for (const c of cells) {
+      c.addEventListener("mouseover", highlightShip);
+      c.addEventListener("mouseout", removeHighlight);
+      c.addEventListener("click", confirmPlacement);
+    }
+
+    function confirmPlacement(e) {
+      const c = e.target;
+      const x = parseInt(c.dataset.x);
+      const y = parseInt(c.dataset.y);
+      if (board.placeShip(ship, x, y, true)) {
+        board.render();
+        resolve("good");
+      }
+    }
+
+    function removeHighlight(e) {
+      for (const c of cells) {
+        c.classList.remove("temp-ship");
+      }
+    }
+
+    function highlightShip(e) {
+      const c = e.target;
+      const x = parseInt(c.dataset.x);
+      const y = parseInt(c.dataset.y);
+      ship.coordinates = [];
+      for (let i = 0; i < ship.length; i++) {
+        ship.coordinates.push([x + i, y]);
+      }
+      if (ship.coordinates.every(([x, y]) => board.validCell(x, y))) {
+        for (const [x, y] of ship.coordinates) {
+          const tempC = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+          tempC.classList.add("temp-ship");
+        }
+      }
+    }
+  });
+}
+
+function playerTurn() {
+  const cells = Array.from(BOT_BOARD.children).filter((c) => c.dataset.active === "Y");
+  return new Promise((res) => {
+    cells.forEach((c) =>
+      c.addEventListener(
+        "click",
+        () => {
+          dom.deactivateCell(c);
+          res([parseInt(c.dataset.x), parseInt(c.dataset.y)]);
+        },
+        { once: true }
+      )
+    );
+  });
 }
 
 init();
