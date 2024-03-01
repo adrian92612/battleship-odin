@@ -1,5 +1,8 @@
 import { Cell } from "./gameboard";
 
+const BOT_BOARD = document.querySelector(".bot-board");
+const PLAYER_BOARD = document.querySelector(".human-board");
+
 const createCells = (container, x, y, owner) => {
   const cellDiv = document.createElement("div");
   cellDiv.dataset.x = x;
@@ -8,7 +11,6 @@ const createCells = (container, x, y, owner) => {
   cellDiv.dataset.active = "Y";
   cellDiv.classList.add("cells");
   container.append(cellDiv);
-  const cell = new Cell(cellDiv, x, y);
   return cellDiv;
 };
 
@@ -32,6 +34,23 @@ function getPlayerName() {
   });
 }
 
+function updateBoard(board, mark, x, y, bot) {
+  updateCell(x, y, board.owner, mark);
+  if (mark === "hit") {
+    const ship = board.grid[x][y];
+    const cells = ship.sunk ? ship.neighborCells : board.getCornerCells(x, y);
+    console.log(cells);
+    for (const [cx, cy] of cells) {
+      const c = document.querySelector(
+        `[data-x="${cx}"][data-y="${cy}"][data-owner="${board.owner}"]`
+      );
+      deactivateCell(c);
+      updateCell(cx, cy, board.owner, "missed");
+      if (board.owner === "human") bot.prevAtks.push(`${x},${y}`);
+    }
+  }
+}
+
 function showPlayerBoard(name) {
   const board = document.querySelector(".human-container");
   const nameTag = document.querySelector(".human-name");
@@ -44,4 +63,12 @@ function showBotBoard() {
   board.removeAttribute("style");
 }
 
-export { createCells, updateCell, getPlayerName, showPlayerBoard, showBotBoard, deactivateCell };
+export {
+  createCells,
+  updateCell,
+  getPlayerName,
+  showPlayerBoard,
+  showBotBoard,
+  deactivateCell,
+  updateBoard,
+};

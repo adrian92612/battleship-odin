@@ -47,8 +47,6 @@ function playerTurn() {
   });
 }
 
-function removeCells() {}
-
 async function runGame(human, bot) {
   console.log("game!!");
   //place bot ships
@@ -60,46 +58,31 @@ async function runGame(human, bot) {
   bot.board.render();
   dom.showBotBoard();
 
-  let GameOver = false;
+  let isGameOver = false;
 
-  while (!GameOver) {
+  while (!isGameOver) {
     // enable clicks on bot board
     BOT_BOARD.style.pointerEvents = "all";
     // get player attack coordinate
     const [x, y] = await playerTurn();
     // disable click on bot board
     BOT_BOARD.style.pointerEvents = "none";
-
     // bot receive attack, if hit disable corner cells as well
     const mark = bot.board.receiveAttack(x, y) ? "hit" : "missed";
-    dom.updateCell(x, y, "bot", mark);
-
-    if (mark === "hit") {
-      const ship = bot.board.grid[x][y];
-      // if ship is sunk, deactivate neighbor cells else corner cells
-      const cells = ship.sunk ? ship.neighborCells : bot.board.getCornerCells(x, y);
-      cells.forEach(([x, y]) => {
-        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"][data-owner="bot"]`);
-        dom.deactivateCell(cell);
-        dom.updateCell(x, y, "bot", "missed");
-      });
+    dom.updateBoard(bot.board, mark, x, y);
+    if (bot.board.allShipsSunk()) {
+      isGameOver = true;
+      break;
     }
 
+    // Bot turn
     const [bX, bY] = await bot.getXY(); // 0.5 sec delay before bot attack
-
-    const botRes = human.receiveAttack(bX, bY) ? "hit" : "missed";
-    dom.updateCell(bX, bY, "human", botRes);
-    if (botRes === "hit") {
-      const ship = human.grid[bX][bY];
-      const cells = ship.sunk ? ship.neighborCells : human.getCornerCells(bX, bY);
-      cells.forEach(([x, y]) => {
-        bot.pushToPrevAtks(x, y);
-        const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"][data-owner="human"]`);
-        dom.deactivateCell(cell);
-        dom.updateCell(x, y, "human", "missed");
-      });
-    }
+    const botMark = human.receiveAttack(bX, bY) ? "hit" : "missed";
+    dom.updateBoard(human, botMark, bX, bY, bot);
+    if (human.allShipsSunk()) isGameOver = true;
   }
+
+  console.log("END!!!");
 }
 
 init();

@@ -99,6 +99,7 @@ export default function Gameboard(name) {
 
     render: () => {
       const container = document.querySelector(`.${owner}-board`);
+      container.innerHTML = "";
       grid.forEach((column, y) => {
         column.forEach((row, x) => {
           const cell = dom.createCells(container, x, y, owner);

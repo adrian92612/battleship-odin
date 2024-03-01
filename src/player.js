@@ -29,6 +29,7 @@ function Bot(botName = "Admiral AI") {
   return Object.freeze({
     name,
     board,
+    prevAtks,
 
     pushToPrevAtks: (x, y) => prevAtks.push(`${x},${y}`),
 
