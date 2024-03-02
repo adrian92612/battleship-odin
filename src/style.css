@@ -1,6 +1,7 @@
 :root {
   --grid-size: 450px;
   --container-size: ;
+  --matte-black: #28282b;
 }
 
 * {
@@ -66,18 +67,18 @@ button {
 .bot-board {
   width: var(--grid-size);
   height: var(--grid-size);
-  border: 1px solid black;
+  border: 5px solid var(--matte-black);
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
 }
 
 .cells {
-  border: 1px solid black;
+  border: 1px solid var(--matte-black);
 }
 
 .ship {
-  background-color: black;
+  background-color: var(--matte-black);
 }
 
 .temp-ship {
@@ -85,7 +86,7 @@ button {
 }
 
 .hit {
-  background-color: red;
+  background-color: crimson;
 }
 
 .missed {

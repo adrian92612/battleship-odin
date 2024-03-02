@@ -39,14 +39,13 @@ function updateBoard(board, mark, x, y, bot) {
   if (mark === "hit") {
     const ship = board.grid[x][y];
     const cells = ship.sunk ? ship.neighborCells : board.getCornerCells(x, y);
-    console.log(cells);
     for (const [cx, cy] of cells) {
       const c = document.querySelector(
         `[data-x="${cx}"][data-y="${cy}"][data-owner="${board.owner}"]`
       );
       deactivateCell(c);
       updateCell(cx, cy, board.owner, "missed");
-      if (board.owner === "human") bot.prevAtks.push(`${x},${y}`);
+      if (board.owner === "human") bot.prevAtks.push(`${cx},${cy}`);
     }
   }
 }

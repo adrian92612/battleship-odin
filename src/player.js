@@ -26,7 +26,7 @@ function Bot(botName = "Admiral AI") {
   const prevAtks = [];
   const attackTime = 500;
 
-  return Object.freeze({
+  return {
     name,
     board,
     prevAtks,
@@ -42,7 +42,7 @@ function Bot(botName = "Admiral AI") {
       prevAtks.push(`${x},${y}`);
       return new Promise((res) => setTimeout(() => res([x, y]), attackTime));
     },
-  });
+  };
 }
 
 export { Player, Bot };

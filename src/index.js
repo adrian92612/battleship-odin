@@ -15,7 +15,7 @@ async function init() {
   dom.showPlayerBoard(playerName);
 
   // Place these ships on board
-  const ships = [...SHIPS];
+  const ships = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)];
   human.render();
   dom.showShipAxis();
   while (ships.length > 0) {
@@ -37,13 +37,13 @@ async function init() {
 
 async function runGame(human, bot) {
   console.log("game!!");
-  //place bot ships
-  bot.board.placeShip(new Ship(4), 2, 2, false);
-  bot.board.placeShip(new Ship(3), 5, 2, true);
-  bot.board.placeShip(new Ship(1), 3, 7, true);
 
+  const botShips = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)];
   // show bot board
   bot.board.render();
+  while (botShips.length > 0) {
+    placeBotShips(bot, botShips.shift());
+  }
   dom.showBotBoard();
 
   let isGameOver = false;
@@ -58,19 +58,30 @@ async function runGame(human, bot) {
     // bot receive attack, if hit disable corner cells as well
     const mark = bot.board.receiveAttack(x, y) ? "hit" : "missed";
     dom.updateBoard(bot.board, mark, x, y);
+
     if (bot.board.allShipsSunk()) {
       isGameOver = true;
       break;
     }
 
     // Bot turn
-    const [bX, bY] = await bot.getXY(); // 0.5 sec delay before bot attack
+    const [bX, bY] = await bot.getXY(); // 0.1 sec delay before bot attack
     const botMark = human.receiveAttack(bX, bY) ? "hit" : "missed";
     dom.updateBoard(human, botMark, bX, bY, bot);
     if (human.allShipsSunk()) isGameOver = true;
   }
 
   console.log("END!!!");
+}
+
+function placeBotShips(bot, ship) {
+  const shipAxis = Math.random() < 0.5;
+  let x, y;
+  do {
+    x = Math.floor(Math.random() * 10);
+    y = Math.floor(Math.random() * 10);
+  } while (!bot.board.placeShip(ship, x, y, shipAxis));
+  bot.board.render();
 }
 
 function placeShipOnBoard(board, ship) {
@@ -124,6 +135,7 @@ function placeShipOnBoard(board, ship) {
 
 function playerTurn() {
   const cells = Array.from(BOT_BOARD.children).filter((c) => c.dataset.active === "Y");
+  console.log(cells.length);
   return new Promise((res) => {
     cells.forEach((c) =>
       c.addEventListener(
