@@ -50,12 +50,15 @@ function updateBoard(board, mark, x, y, bot) {
   }
 }
 
-function showWinner(winner) {
+function showWinner(win) {
   const winnerDiv = document.createElement("div");
   winnerDiv.classList.add("winner-div");
 
   const winMsg = document.createElement("p");
-  winMsg.innerText = `Congratulations ${winner}! You've sunk all of your opponent's ships and won the game of Battleship!`;
+  const playerName = document.querySelector(".human-name").innerText;
+  const winningText = `Congratulations <b>${playerName}</b>! You've sunk all of your opponent's ships and won the game of Battleship!`;
+  const losingText = `Game over <b>${playerName}</b>! Unfortunately, all of your ships have been sunk by your opponent. Better luck next time!`;
+  winMsg.innerHTML = win ? winningText : losingText;
 
   const playAgainBtn = document.createElement("button");
   playAgainBtn.innerText = `Play again?`;
@@ -63,7 +66,8 @@ function showWinner(winner) {
 
   winnerDiv.append(winMsg, playAgainBtn);
 
-  document.querySelector("#app").append(winnerDiv);
+  document.body.append(winnerDiv);
+  document.querySelector("#app").style.filter = "blur(5px)";
 }
 
 function showPlayerBoard(name) {

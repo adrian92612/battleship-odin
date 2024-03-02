@@ -89,8 +89,7 @@ export default function Gameboard(name) {
       grid.forEach((column, y) => {
         column.forEach((row, x) => {
           const cell = dom.createCells(container, x, y, owner);
-          if (grid[x][y] instanceof Ship /*&& owner !== "bot"*/)
-            dom.updateCell(x, y, owner, "ship");
+          if (grid[x][y] instanceof Ship && owner !== "bot") dom.updateCell(x, y, owner, "ship");
         });
       });
     },
