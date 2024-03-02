@@ -50,6 +50,22 @@ function updateBoard(board, mark, x, y, bot) {
   }
 }
 
+function showWinner(winner) {
+  const winnerDiv = document.createElement("div");
+  winnerDiv.classList.add("winner-div");
+
+  const winMsg = document.createElement("p");
+  winMsg.innerText = `Congratulations ${winner}! You've sunk all of your opponent's ships and won the game of Battleship!`;
+
+  const playAgainBtn = document.createElement("button");
+  playAgainBtn.innerText = `Play again?`;
+  playAgainBtn.addEventListener("click", () => window.location.reload());
+
+  winnerDiv.append(winMsg, playAgainBtn);
+
+  document.querySelector("#app").append(winnerDiv);
+}
+
 function showPlayerBoard(name) {
   const board = document.querySelector(".human-container");
   const nameTag = document.querySelector(".human-name");
@@ -85,4 +101,5 @@ export {
   deactivateCell,
   updateBoard,
   showShipAxis,
+  showWinner,
 };
