@@ -63,6 +63,20 @@ function showBotBoard() {
   board.removeAttribute("style");
 }
 
+function showShipAxis(show = true) {
+  const axisDiv = document.querySelector(".ship-axis");
+  const axis = document.querySelector("#axis");
+  if (show) {
+    axisDiv.removeAttribute("style");
+    axisDiv.addEventListener("click", () => {
+      const text = axis.innerText === "Horizontal" ? "Vertical" : "Horizontal";
+      axis.innerText = text;
+    });
+  } else {
+    axisDiv.setAttribute("style", "display:none");
+  }
+}
+
 export {
   createCells,
   updateCell,
@@ -71,4 +85,5 @@ export {
   showBotBoard,
   deactivateCell,
   updateBoard,
+  showShipAxis,
 };

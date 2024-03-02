@@ -6,24 +6,25 @@ import * as dom from "./dom";
 
 const BOT_BOARD = document.querySelector(".bot-board");
 const PLAYER_BOARD = document.querySelector(".human-board");
+const SHIPS = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)];
 
 async function init() {
   const human = Gameboard("human");
-  // const bot = Gameboard("bot");
   const bot = Bot();
   const playerName = `Admiral ${await dom.getPlayerName()}`;
   dom.showPlayerBoard(playerName);
 
-  //render
-  const ships = [new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2)];
+  // Place these ships on board
+  const ships = [...SHIPS];
   human.render();
-
+  dom.showShipAxis();
   while (ships.length > 0) {
     await placeShipOnBoard(human, ships.shift());
   }
-  console.log("nice");
+  dom.showShipAxis(false);
 
   const startGame = document.querySelector("#start-game");
+  startGame.removeAttribute("style");
   startGame.addEventListener(
     "click",
     (e) => {
@@ -77,6 +78,7 @@ function placeShipOnBoard(board, ship) {
   // check if all coordinates are null in board, place ships, render board, get another ship repeat
   return new Promise((resolve) => {
     const cells = Array.from(PLAYER_BOARD.children);
+    const axis = document.querySelector("#axis");
     for (const c of cells) {
       c.addEventListener("mouseover", highlightShip);
       c.addEventListener("mouseout", removeHighlight);
@@ -87,7 +89,8 @@ function placeShipOnBoard(board, ship) {
       const c = e.target;
       const x = parseInt(c.dataset.x);
       const y = parseInt(c.dataset.y);
-      if (board.placeShip(ship, x, y, true)) {
+      const a = axis.innerText === "Horizontal" ? true : false;
+      if (board.placeShip(ship, x, y, a)) {
         board.render();
         resolve("good");
       }
@@ -101,13 +104,15 @@ function placeShipOnBoard(board, ship) {
 
     function highlightShip(e) {
       const c = e.target;
-      const x = parseInt(c.dataset.x);
-      const y = parseInt(c.dataset.y);
+      let x = parseInt(c.dataset.x);
+      let y = parseInt(c.dataset.y);
       ship.coordinates = [];
       for (let i = 0; i < ship.length; i++) {
-        ship.coordinates.push([x + i, y]);
+        const newX = axis.innerText === "Horizontal" ? x + i : x;
+        const newY = axis.innerText === "Vertical" ? y + i : y;
+        ship.coordinates.push([newX, newY]);
       }
-      if (ship.coordinates.every(([x, y]) => board.validCell(x, y))) {
+      if (ship.coordinates.every(([x, y]) => board.isValidCell(x, y))) {
         for (const [x, y] of ship.coordinates) {
           const tempC = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
           tempC.classList.add("temp-ship");

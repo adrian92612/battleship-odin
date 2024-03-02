@@ -1,15 +1,6 @@
 import { Ship } from "./ship";
 import * as dom from "./dom";
 
-class Cell {
-  constructor(element, x, y) {
-    this.element = element;
-    this.x = x;
-    this.y = y;
-    this.active = true;
-  }
-}
-
 export default function Gameboard(name) {
   const gridSize = 10;
   const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(null));
@@ -19,6 +10,7 @@ export default function Gameboard(name) {
 
   const isWithinBoard = (x, y) => x >= 0 && x <= 9 && y >= 0 && y <= 9;
   const isValidCell = (x, y) => isWithinBoard(x, y) && grid[x][y] === null;
+  const allShipsSunk = () => shipArray.every((x) => x.sunk === true);
 
   const getNeighborCells = (x, y) => {
     const neighborCells = [
@@ -37,24 +29,24 @@ export default function Gameboard(name) {
       .sort();
   };
 
+  const getCornerCells = (x, y) => {
+    const cornerCells = [
+      [x - 1, y - 1],
+      [x - 1, y + 1],
+      [x + 1, y + 1],
+      [x + 1, y - 1],
+    ];
+    return cornerCells.filter(([x, y]) => isWithinBoard(x, y)).sort();
+  };
+
   return {
     grid,
     owner,
     cellsArray,
     shipArray,
-
-    allShipsSunk: () => shipArray.every((x) => x.sunk === true),
-    validCell: (x, y) => isValidCell(x, y),
-
-    getCornerCells: (x, y) => {
-      const cornerCells = [
-        [x - 1, y - 1],
-        [x - 1, y + 1],
-        [x + 1, y + 1],
-        [x + 1, y - 1],
-      ];
-      return cornerCells.filter(([x, y]) => isWithinBoard(x, y)).sort();
-    },
+    isValidCell,
+    allShipsSunk,
+    getCornerCells,
 
     placeShip: (ship, x, y, horizontal = true) => {
       // set ship's coordinates
@@ -79,13 +71,6 @@ export default function Gameboard(name) {
           [...ship.coordinates.map(([x, y]) => getNeighborCells(x, y))].flat(1).map(JSON.stringify)
         ),
       ].map(JSON.parse);
-      // // store corner cells
-      // ship.cornerCells = [
-      //   ...new Set(
-      //     [...ship.coordinates.map(([x, y]) => getCornerCells(x, y))].flat(1).map(JSON.stringify)
-      //   ),
-      // ].map(JSON.parse);
-      // set neighbor cells to NA
       ship.neighborCells.forEach(([x, y]) => (grid[x][y] = "N/A"));
       return true;
     },
@@ -110,5 +95,3 @@ export default function Gameboard(name) {
     },
   };
 }
-
-export { Cell };
