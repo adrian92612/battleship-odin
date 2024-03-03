@@ -13,3 +13,7 @@ tasks
 2. check if cell is ship
 3. if ship, call ship.hit, get and remove corner cells
 4. if ship is sunk, check if no ships left
+
+Place Ships
+
+1. create vari

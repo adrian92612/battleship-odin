@@ -47,7 +47,7 @@ async function runGame(human, bot) {
   dom.showBotBoard();
 
   let isGameOver = false;
-  let winner = "";
+  let playerWin;
 
   while (!isGameOver) {
     // enable clicks on bot board
@@ -62,7 +62,7 @@ async function runGame(human, bot) {
 
     if (bot.board.allShipsSunk()) {
       isGameOver = true;
-      winner = document.querySelector(".human-name").innerText;
+      playerWin = true;
       break;
     }
 
@@ -72,12 +72,12 @@ async function runGame(human, bot) {
     dom.updateBoard(human, botMark, bX, bY, bot);
     if (human.allShipsSunk()) {
       isGameOver = true;
-      winner = bot.name;
+      playerWin = false;
     }
   }
 
   console.log("END!!!");
-  dom.showWinner(winner);
+  dom.showWinner(playerWin);
 }
 
 function placeBotShips(bot, ship) {

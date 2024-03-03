@@ -56,8 +56,8 @@ function showWinner(win) {
 
   const winMsg = document.createElement("p");
   const playerName = document.querySelector(".human-name").innerText;
-  const winningText = `Congratulations <b>${playerName}</b>! You've sunk all of your opponent's ships and won the game of Battleship!`;
-  const losingText = `Game over <b>${playerName}</b>! Unfortunately, all of your ships have been sunk by your opponent. Better luck next time!`;
+  const winningText = `Congratulations ${playerName}! You've sunk all of your opponent's ships and won the game of Battleship!`;
+  const losingText = `Game over ${playerName}! Unfortunately, all of your ships have been sunk by your opponent. Better luck next time!`;
   winMsg.innerHTML = win ? winningText : losingText;
 
   const playAgainBtn = document.createElement("button");
